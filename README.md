@@ -6,6 +6,13 @@
 </p>
 
 > Projeto construido baseado em boas práticas de Engenharia de Software tais como desenvolvimento em camadas e tratamento de exceções. A seguir a estrutura de camadas do sistema que será desenvolvido:
+<img src="https://user-images.githubusercontent.com/11077068/208956623-d10c25f6-d819-4ffc-b7a7-b23e2ea94642.png" alt="Paris" class="center">
+<img src="https://user-images.githubusercontent.com/11077068/208956978-4c5a2dd7-6581-4975-b51f-06740ecedd56.png" alt="Paris" class="center">
+
+
+
+
+
 
 ## Author
 
@@ -15,6 +22,15 @@
 * Twitter: [@SousaMardoqueu](https://twitter.com/SousaMardoqueu)
 * Github: [@Mardoqueu](https://github.com/Mardoqueu)
 * LinkedIn: [@mardoqueu-sousa](https://linkedin.com/in/mardoqueu-sousa)
+
+## Instrutor
+
+👤 **Valdir Cezar**
+
+
+* Github: [@ValdirCezar](https://github.com/ValdirCezar)
+* LinkedIn: [@valdircezar](https://linkedin.com/in/valdircezar)
+
 
 ## Show your support
 
