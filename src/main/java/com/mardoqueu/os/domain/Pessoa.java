@@ -6,10 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public abstract class Pessoa {
+public abstract class Pessoa implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
