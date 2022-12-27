@@ -2,16 +2,16 @@ package com.mardoqueu.os.resources.exceptions;
 
 import java.io.Serializable;
 
-public class StandartError implements Serializable {
+public class StandardError implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long timestamp;
     private Integer status;
     private String error;
-    public StandartError(){
+    public StandardError(){
         super();
     }
 
-    public StandartError(Long timestamp, Integer status, String error) {
+    public StandardError(Long timestamp, Integer status, String error) {
         this.timestamp = timestamp;
         this.status = status;
         this.error = error;

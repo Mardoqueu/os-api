@@ -3,6 +3,7 @@ package com.mardoqueu.os.services;
 import com.mardoqueu.os.domain.Tecnico;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
+import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
 import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,17 @@ public class TecnicoService {
     }
 
     public Tecnico create(TecnicoDTO objDTO) {
+        if(findByCpf(objDTO) != null){
+            throw new DataIntegrityViolationException("CPF já cadastrado na base de dados");
+        }
         Tecnico newObj = new Tecnico(null, objDTO.getNome(), objDTO.getCpf(), objDTO.getTelefone());
         return repository.save(newObj);
+    }
+    private Tecnico findByCpf(TecnicoDTO objDTO) {
+        Optional<Tecnico> obj = repository.findByCpf(objDTO.getCpf());
+        if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+            throw new DataIntegrityViolationException("CPF já cadastrado no sistema");
+        }
+        return null;
     }
 }
