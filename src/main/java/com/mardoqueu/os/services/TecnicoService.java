@@ -5,6 +5,7 @@ import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
 import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
 import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,4 +42,17 @@ public class TecnicoService {
         }
         return null;
     }
+
+    public Tecnico update(Integer id,@Valid TecnicoDTO objDTO) {
+        Tecnico oldObj = findById(id);
+        if(findByCpf(objDTO) != null && findByCpf(objDTO).getId() != id){
+            throw new DataIntegrityViolationException("CPF já cadastrado na base de dados");
+        }
+        oldObj.setNome(objDTO.getNome());
+        oldObj.setCpf(objDTO.getCpf());
+        oldObj.setTelefone(objDTO.getTelefone());
+        return repository.save(oldObj);
+    }
+
+
 }

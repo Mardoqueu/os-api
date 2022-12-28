@@ -1,9 +1,6 @@
 package com.mardoqueu.os.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.io.Serializable;
@@ -19,6 +16,7 @@ public abstract class Pessoa implements Serializable {
     private String nome;
 
     @CPF
+    @Column(unique = true)
     private String cpf;
 
     private String telefone;
