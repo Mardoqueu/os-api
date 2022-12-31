@@ -3,13 +3,13 @@ package com.mardoqueu.os.resources;
 import com.mardoqueu.os.domain.OS;
 import com.mardoqueu.os.dtos.OSDTO;
 import com.mardoqueu.os.services.OsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,5 +32,12 @@ public class OsResource {
         List<OS> list = service.findAll();
         List<OSDTO> listDTO = list.stream().map(obj -> new OSDTO(obj)).collect(Collectors.toList());
         return ResponseEntity.ok().body(listDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<OSDTO> create(@Valid @RequestBody OSDTO objDTO){
+        objDTO = new OSDTO(service.create(objDTO));
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objDTO.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }

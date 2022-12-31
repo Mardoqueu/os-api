@@ -2,6 +2,7 @@ package com.mardoqueu.os.dtos;
 
 
 import com.mardoqueu.os.domain.OS;
+import jakarta.validation.constraints.NotEmpty;
 
 
 import java.io.Serializable;
@@ -14,6 +15,8 @@ public class OSDTO implements Serializable {
     private LocalDateTime dataAbertura;
     private LocalDateTime dataFechamento;
     private Integer prioridade;
+
+    @NotEmpty(message = "O campo observações é requerido")
     private String obervacoes;
     private Integer status;
     private Integer tecnico;
