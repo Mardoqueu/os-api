@@ -9,10 +9,36 @@
 <img src="https://user-images.githubusercontent.com/11077068/208956623-d10c25f6-d819-4ffc-b7a7-b23e2ea94642.png" alt="Paris" class="center">
 <img src="https://user-images.githubusercontent.com/11077068/208956978-4c5a2dd7-6581-4975-b51f-06740ecedd56.png" alt="Paris" class="center">
 
+## <a href="https://os-api.herokuapp.com/tecnicos" target="_blank">Endpoints para Técnicos</a></i> 
 
 
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `/tecnicos`                              | Retrieve all tecnicos.                   |
+| `POST`   | `/tecnicos`                              | Create a new tecnico.                    |
+| `GET`    | `/tecnicos/{id}`                         | Retrieve tecnico by id                   |
+| `PUT `   | `/tecnicos/{id}`                         | Edit tecnico by id                       |
+| `DELETE` | `/tecnicos/{id}`                         | Delete tecnico by id                     |
 
+## <a href="https://os-api.herokuapp.com/tecnicos" target="_blank">Endpoints para Clientes</a></i> 
 
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `/clientes`                              | Retrieve all clientes.                   |
+| `POST`   | `/clientes`                              | Create a new cliente.                    |
+| `GET`    | `/clientes/{id}`                         | Retrieve cliente by id                   |
+| `PUT `   | `/clientes/{id}`                         | Edit cliente by id                       |
+| `DELETE` | `/clientes/{id}`                         | Delete cliente by id                     |
+
+## <a href="https://os-api.herokuapp.com/tecnicos" target="_blank">Endpoints para OS (Ordem de serviço)</a></i> 
+
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `/os`                                    | Retrieve all os.                         |
+| `POST`   | `/os`                                    | Create a new os.                         |
+| `GET`    | `/os/{id}`                               | Retrieve os by id                        |
+| `PUT `   | `/os/{id}`                               | Edit os by id                            |
+  
 
 ## Author
 
