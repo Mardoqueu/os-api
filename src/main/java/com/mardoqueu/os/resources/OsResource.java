@@ -40,4 +40,10 @@ public class OsResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objDTO.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @PutMapping
+    public ResponseEntity<OSDTO> update(@Valid @RequestBody OSDTO objDTO){
+        objDTO = new OSDTO(service.update(objDTO));
+        return ResponseEntity.ok().body(objDTO);
+    }
 }

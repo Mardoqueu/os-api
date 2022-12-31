@@ -41,6 +41,11 @@ public class OsService {
         return fromDTO(obj);
     }
 
+    public OS update(@Valid OSDTO objDTO) {
+        findById(objDTO.getId());
+        return fromDTO(objDTO);
+    }
+
     private OS fromDTO(OSDTO obj){
         OS newObj = new OS();
         newObj.setId(obj.getId());
@@ -55,4 +60,6 @@ public class OsService {
         newObj.setCliente(cli);
         return repository.save(newObj);
     }
+
+
 }
