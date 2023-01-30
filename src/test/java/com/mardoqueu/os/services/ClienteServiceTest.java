@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,6 +32,7 @@ class ClienteServiceTest {
     public static final String NOME     = "Mardoqueu";
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
+    public static final int INDEX = 0;
     @InjectMocks
     private ClienteService service;
 
@@ -79,7 +81,20 @@ class ClienteServiceTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfClients() {
+        when(repository.findAll()).thenReturn(List.of(cliente));
+
+
+        List<Cliente> response = service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(Cliente.class, response.get(INDEX).getClass());
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NOME, response.get(INDEX).getNome());
+        assertEquals(CPF, response.get(INDEX).getCpf());
+        assertEquals(TELEFONE, response.get(INDEX).getTelefone());
     }
 
     @Test
