@@ -4,6 +4,7 @@ import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.repositories.ClienteRepository;
 import com.mardoqueu.os.repositories.PessoaRepository;
+import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.when;
 class ClienteServiceTest {
 
     public static final int ID          = 1;
+    public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado! Id: " + ID + ", Tipo: " + Cliente.class.getName();
     public static final String NOME     = "Mardoqueu";
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
@@ -60,6 +63,19 @@ class ClienteServiceTest {
         assertEquals(NOME, response.getNome());
         assertEquals(CPF, response.getCpf());
         assertEquals(TELEFONE, response.getTelefone());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        when(repository.findById(any())).thenThrow(new ObjectNotFoundException(
+                OBJETO_NAO_ENCONTRADO));
+
+        try{
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
+        }
     }
 
     @Test
