@@ -21,7 +21,7 @@ public class ClienteDTO implements Serializable {
     @NotEmpty(message = "O campo telefone é requerido")
     private String telefone;
 
-    public ClienteDTO() {
+    public ClienteDTO(int id, String nome, String cpf, String telefone) {
         super();
     }
 
