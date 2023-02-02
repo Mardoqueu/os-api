@@ -4,6 +4,7 @@ import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.repositories.ClienteRepository;
 import com.mardoqueu.os.repositories.PessoaRepository;
+import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
 import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,7 +99,29 @@ class ClienteServiceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSucess() {
+        when(repository.save(any())).thenReturn(cliente);
+
+        Cliente response = service.create(clienteDTO);
+        assertNotNull(response);
+        assertEquals(Cliente.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NOME, response.getNome());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(TELEFONE, response.getTelefone());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByCpf(any())).thenReturn(optionalCliente);
+
+        try{
+            optionalCliente.get().setId(2);
+            service.create(clienteDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("CPF já cadastrado no sistema", ex.getMessage());
+        }
     }
 
     @Test
