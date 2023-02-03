@@ -31,6 +31,7 @@ class ClienteServiceTest {
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
     public static final int INDEX = 0;
+    public static final String CPF_JA_CADASTRADO_NO_SISTEMA = "CPF já cadastrado no sistema";
     @InjectMocks
     private ClienteService service;
 
@@ -117,7 +118,7 @@ class ClienteServiceTest {
             service.create(clienteDTO);
         }catch (Exception ex){
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
-            assertEquals("CPF já cadastrado no sistema", ex.getMessage());
+            assertEquals(CPF_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
         }
     }
 
@@ -136,6 +137,20 @@ class ClienteServiceTest {
         assertEquals(objDTO.getCpf(), updatedCliente.getCpf());
         assertEquals(objDTO.getTelefone(), updatedCliente.getTelefone());
     }
+
+    @Test
+    void whenUpdateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByCpf(any())).thenReturn(optionalCliente);
+
+        try{
+            optionalCliente.get().setId(2);
+            service.create(clienteDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(CPF_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
+    }
+
 
     @Test
     void delete() {
