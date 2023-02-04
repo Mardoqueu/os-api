@@ -6,20 +6,17 @@ import com.mardoqueu.os.repositories.ClienteRepository;
 import com.mardoqueu.os.repositories.PessoaRepository;
 import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
 import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -34,6 +31,7 @@ class ClienteServiceTest {
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
     public static final int INDEX = 0;
+    public static final String CPF_JA_CADASTRADO_NO_SISTEMA = "CPF já cadastrado no sistema";
     @InjectMocks
     private ClienteService service;
 
@@ -120,13 +118,39 @@ class ClienteServiceTest {
             service.create(clienteDTO);
         }catch (Exception ex){
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
-            assertEquals("CPF já cadastrado no sistema", ex.getMessage());
+            assertEquals(CPF_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
         }
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSucess() {
+        Integer id = 1;
+        ClienteDTO objDTO = new ClienteDTO(id,"John Doe", "12345678910", "555-555-5555");
+        Cliente oldObj = new Cliente(id, "Jane Doe", "09876543210", "555-555-5554");
+
+        when(repository.findById(id)).thenReturn(Optional.of(oldObj));
+        when(repository.save(any(Cliente.class))).thenReturn(oldObj);
+
+        Cliente updatedCliente = service.update(id, objDTO);
+
+        assertEquals(objDTO.getNome(), updatedCliente.getNome());
+        assertEquals(objDTO.getCpf(), updatedCliente.getCpf());
+        assertEquals(objDTO.getTelefone(), updatedCliente.getTelefone());
     }
+
+    @Test
+    void whenUpdateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByCpf(any())).thenReturn(optionalCliente);
+
+        try{
+            optionalCliente.get().setId(2);
+            service.create(clienteDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(CPF_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
+    }
+
 
     @Test
     void delete() {
