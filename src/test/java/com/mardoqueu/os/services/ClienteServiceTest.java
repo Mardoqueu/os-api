@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -153,7 +153,11 @@ class ClienteServiceTest {
 
 
     @Test
-    void delete() {
+    void deleteWithSuccess() {
+        when(repository.findById(anyInt())).thenReturn(optionalCliente);
+                doNothing().when(repository).deleteById(anyInt());
+        service.delete(ID);
+        verify(repository, times(1)).deleteById(anyInt());
     }
 
     private void startCliente(){
