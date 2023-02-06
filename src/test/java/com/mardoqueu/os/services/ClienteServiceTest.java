@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -32,6 +32,7 @@ class ClienteServiceTest {
     public static final String TELEFONE = "(86) 99125-9218";
     public static final int INDEX = 0;
     public static final String CPF_JA_CADASTRADO_NO_SISTEMA = "CPF já cadastrado no sistema";
+    public static final String NÃO_ENCONTRADO = "Objeto não encontrado";
     @InjectMocks
     private ClienteService service;
 
@@ -153,7 +154,23 @@ class ClienteServiceTest {
 
 
     @Test
-    void delete() {
+    void deleteWithSuccess() {
+        when(repository.findById(anyInt())).thenReturn(optionalCliente);
+                doNothing().when(repository).deleteById(anyInt());
+        service.delete(ID);
+        verify(repository, times(1)).deleteById(anyInt());
+    }
+
+    @Test
+    void deleteWithObjectNotFoundException() {
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(NÃO_ENCONTRADO));
+        try{
+            service.delete(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(NÃO_ENCONTRADO, ex.getMessage());
+        }
+
     }
 
     private void startCliente(){
