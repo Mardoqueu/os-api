@@ -3,7 +3,6 @@ package com.mardoqueu.os.services;
 import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.repositories.ClienteRepository;
-import com.mardoqueu.os.repositories.PessoaRepository;
 import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
 import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +38,6 @@ class ClienteServiceTest {
     @Mock
     private ClienteRepository repository;
 
-    @Mock
-    private PessoaRepository pessoaRepository;
 
     private Cliente cliente;
     private ClienteDTO clienteDTO;
