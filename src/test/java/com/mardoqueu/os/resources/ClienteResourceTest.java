@@ -7,10 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
@@ -41,7 +47,17 @@ class ClienteResourceTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnSucess() {
+        when(service.findById(anyInt())).thenReturn(cliente);
+
+        Cliente response = service.findById(ID);
+
+        assertNotNull(response);
+        assertEquals(Cliente.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NOME, response.getNome());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(TELEFONE, response.getTelefone());
     }
 
     @Test
