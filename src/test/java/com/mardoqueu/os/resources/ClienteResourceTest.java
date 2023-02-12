@@ -27,7 +27,6 @@ import static org.mockito.Mockito.*;
 class ClienteResourceTest {
 
     public static final int ID          = 1;
-    public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado! Id: " + ID + ", Tipo: " + Cliente.class.getName();
     public static final String NOME     = "Mardoqueu";
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
@@ -113,7 +112,16 @@ class ClienteResourceTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSucess() {
+        doNothing().when(service).delete(anyInt());
+
+        ResponseEntity<Void> response = resource.delete(ID);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        verify(service, times(1)).delete(anyInt());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
     }
 
     private void startCliente(){
