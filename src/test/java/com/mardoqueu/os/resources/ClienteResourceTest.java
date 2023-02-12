@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -95,7 +95,21 @@ class ClienteResourceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSucess() {
+        when(service.update(anyInt(), any())).thenReturn(cliente);
+
+        ResponseEntity<ClienteDTO> response = resource.update(ID, clienteDTO);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(ClienteDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NOME, response.getBody().getNome());
+        assertEquals(CPF, response.getBody().getCpf());
+        assertEquals(TELEFONE, response.getBody().getTelefone());
     }
 
     @Test
