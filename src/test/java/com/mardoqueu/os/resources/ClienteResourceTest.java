@@ -20,14 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
 class ClienteResourceTest {
 
     public static final int ID          = 1;
-    public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado! Id: " + ID + ", Tipo: " + Cliente.class.getName();
     public static final String NOME     = "Mardoqueu";
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
@@ -95,11 +94,34 @@ class ClienteResourceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSucess() {
+        when(service.update(anyInt(), any())).thenReturn(cliente);
+
+        ResponseEntity<ClienteDTO> response = resource.update(ID, clienteDTO);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(ClienteDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NOME, response.getBody().getNome());
+        assertEquals(CPF, response.getBody().getCpf());
+        assertEquals(TELEFONE, response.getBody().getTelefone());
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSucess() {
+        doNothing().when(service).delete(anyInt());
+
+        ResponseEntity<Void> response = resource.delete(ID);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        verify(service, times(1)).delete(anyInt());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
     }
 
     private void startCliente(){
