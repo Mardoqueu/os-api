@@ -1,28 +1,27 @@
 package com.mardoqueu.os.services;
 
-import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.domain.Tecnico;
-import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
-import org.junit.jupiter.api.Assertions;
+import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TecnicoServiceTest {
 
+    public static final String OBJETO_NAO_ENCONTRAO = "Objeto não encontrao";
     @InjectMocks
     private TecnicoService service;
 
@@ -48,7 +47,7 @@ class TecnicoServiceTest {
 
     @Test
     void whenFindByIdThenReturnAnTecnicoInstance() {
-        Mockito.when(repository.findById(anyInt())).thenReturn(optionalTecnico);
+        when(repository.findById(anyInt())).thenReturn(optionalTecnico);
 
         Tecnico response = service.findById(ID);
 
@@ -58,6 +57,19 @@ class TecnicoServiceTest {
         assertEquals(NOME, response.getNome());
         assertEquals(CPF, response.getCpf());
         assertEquals(TELEFONE, response.getTelefone());
+    }
+
+    @Test
+   void whenFindByIdThenReturnAnObjectNotFoundException(){
+        when(repository.findById(any())).thenThrow(new ObjectNotFoundException(
+                OBJETO_NAO_ENCONTRAO));
+
+        try{
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJETO_NAO_ENCONTRAO, ex.getMessage());
+        }
     }
 
     @Test
