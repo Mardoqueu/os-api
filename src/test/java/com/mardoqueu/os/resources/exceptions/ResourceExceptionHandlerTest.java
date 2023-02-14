@@ -15,12 +15,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResourceExceptionHandlerTest {
 
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
+    public static final String CPF_JA_CADASTRADO = "CPF já cadastrado";
     @InjectMocks
     ResourceExceptionHandler exceptionHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void whenDataIntegrityViolationExceptionThenReturnAResponseEntity() {
+        ResponseEntity<StandardError> response = exceptionHandler
+                .dataIntegrityViolationException(
+                        new DataIntegrityViolationException(CPF_JA_CADASTRADO));
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(CPF_JA_CADASTRADO, response.getBody().getError());
+        assertEquals(400, response.getBody().getStatus());
+
     }
 
     @Test
@@ -36,11 +53,6 @@ class ResourceExceptionHandlerTest {
         assertEquals(StandardError.class, response.getBody().getClass());
         assertEquals(OBJETO_NAO_ENCONTRADO, response.getBody().getError());
         assertEquals(404, response.getBody().getStatus());
-
-    }
-
-    @Test
-    void testObjectNotFoundException() {
     }
 
     @Test
