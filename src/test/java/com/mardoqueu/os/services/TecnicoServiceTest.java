@@ -1,28 +1,28 @@
 package com.mardoqueu.os.services;
 
-import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.domain.Tecnico;
-import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
-import org.junit.jupiter.api.Assertions;
+import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TecnicoServiceTest {
 
+    public static final String OBJETO_NAO_ENCONTRAO = "Objeto não encontrao";
     @InjectMocks
     private TecnicoService service;
 
@@ -40,6 +40,9 @@ class TecnicoServiceTest {
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
 
+    public static final int INDEX = 0;
+
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -48,7 +51,7 @@ class TecnicoServiceTest {
 
     @Test
     void whenFindByIdThenReturnAnTecnicoInstance() {
-        Mockito.when(repository.findById(anyInt())).thenReturn(optionalTecnico);
+        when(repository.findById(anyInt())).thenReturn(optionalTecnico);
 
         Tecnico response = service.findById(ID);
 
@@ -61,7 +64,33 @@ class TecnicoServiceTest {
     }
 
     @Test
-    void findAll() {
+   void whenFindByIdThenReturnAnObjectNotFoundException(){
+        when(repository.findById(any())).thenThrow(new ObjectNotFoundException(
+                OBJETO_NAO_ENCONTRAO));
+
+        try{
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJETO_NAO_ENCONTRAO, ex.getMessage());
+        }
+    }
+
+    @Test
+    void whenFindAllThenReturnAnListOfTecnicos() {
+        when(repository.findAll()).thenReturn(List.of(tecnico));
+
+
+        List<Tecnico> response = service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(Tecnico.class, response.get(INDEX).getClass());
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NOME, response.get(INDEX).getNome());
+        assertEquals(CPF, response.get(INDEX).getCpf());
+        assertEquals(TELEFONE, response.get(INDEX).getTelefone());
     }
 
     @Test
