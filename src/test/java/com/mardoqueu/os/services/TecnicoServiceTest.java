@@ -1,5 +1,6 @@
 package com.mardoqueu.os.services;
 
+import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.domain.Tecnico;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
@@ -94,7 +95,16 @@ class TecnicoServiceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSucess() {
+        when(repository.save(any())).thenReturn(tecnico);
+
+        Tecnico response = service.create(tecnicoDTO);
+        assertNotNull(response);
+        assertEquals(Tecnico.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NOME, response.getNome());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(TELEFONE, response.getTelefone());
     }
 
     @Test
