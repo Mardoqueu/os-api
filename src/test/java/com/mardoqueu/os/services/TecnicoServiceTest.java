@@ -2,6 +2,7 @@ package com.mardoqueu.os.services;
 
 import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.domain.Tecnico;
+import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
 import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
@@ -124,7 +125,19 @@ class TecnicoServiceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSucess() {
+        Integer id = 1;
+        TecnicoDTO objDTO = new TecnicoDTO(id,"John Doe", "12345678910", "555-555-5555");
+        Tecnico oldObj = new Tecnico(id, "Jane Doe", "09876543210", "555-555-5554");
+
+        when(repository.findById(id)).thenReturn(Optional.of(oldObj));
+        when(repository.save(any(Tecnico.class))).thenReturn(oldObj);
+
+        Tecnico updatedCliente = service.update(id, objDTO);
+
+        assertEquals(objDTO.getNome(), updatedCliente.getNome());
+        assertEquals(objDTO.getCpf(), updatedCliente.getCpf());
+        assertEquals(objDTO.getTelefone(), updatedCliente.getTelefone());
     }
 
     @Test
