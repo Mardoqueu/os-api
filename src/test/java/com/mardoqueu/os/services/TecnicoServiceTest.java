@@ -18,7 +18,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 class TecnicoServiceTest {
@@ -136,6 +137,14 @@ class TecnicoServiceTest {
         assertEquals(objDTO.getNome(), updatedCliente.getNome());
         assertEquals(objDTO.getCpf(), updatedCliente.getCpf());
         assertEquals(objDTO.getTelefone(), updatedCliente.getTelefone());
+    }
+
+    @Test
+    void deleteWithSuccess() {
+        when(repository.findById(anyInt())).thenReturn(optionalTecnico);
+        doNothing().when(repository).deleteById(anyInt());
+        service.delete(ID);
+        verify(repository, times(1)).deleteById(anyInt());
     }
 
     @Test
