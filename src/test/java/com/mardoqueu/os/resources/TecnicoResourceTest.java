@@ -98,7 +98,21 @@ class TecnicoResourceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSucess() {
+        when(service.update(anyInt(), any())).thenReturn(tecnico);
+
+        ResponseEntity<TecnicoDTO> response = resource.update(ID, tecnicoDTO);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(TecnicoDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NOME, response.getBody().getNome());
+        assertEquals(CPF, response.getBody().getCpf());
+        assertEquals(TELEFONE, response.getBody().getTelefone());
     }
 
     @Test
