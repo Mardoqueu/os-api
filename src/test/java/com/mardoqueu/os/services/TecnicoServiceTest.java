@@ -4,6 +4,7 @@ import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.domain.Tecnico;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
+import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
 import com.mardoqueu.os.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,8 @@ class TecnicoServiceTest {
     public static final String NOME     = "Mardoqueu";
     public static final String CPF      = "616.584.680-74";
     public static final String TELEFONE = "(86) 99125-9218";
+
+    public static final String CPF_JA_CADASTRADO_NO_SISTEMA = "CPF já cadastrado no sistema";
 
     public static final int INDEX = 0;
 
@@ -105,6 +108,19 @@ class TecnicoServiceTest {
         assertEquals(NOME, response.getNome());
         assertEquals(CPF, response.getCpf());
         assertEquals(TELEFONE, response.getTelefone());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException(){
+        when(repository.findByCpf(any())).thenReturn(optionalTecnico);
+
+        try{
+            optionalTecnico.get().setId(2);
+            service.create(tecnicoDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(CPF_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
     }
 
     @Test
