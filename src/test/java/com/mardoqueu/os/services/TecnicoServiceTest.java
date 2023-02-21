@@ -1,8 +1,6 @@
 package com.mardoqueu.os.services;
 
-import com.mardoqueu.os.domain.Cliente;
 import com.mardoqueu.os.domain.Tecnico;
-import com.mardoqueu.os.dtos.ClienteDTO;
 import com.mardoqueu.os.dtos.TecnicoDTO;
 import com.mardoqueu.os.repositories.TecnicoRepository;
 import com.mardoqueu.os.resources.exceptions.DataIntegrityViolationException;
@@ -141,7 +139,16 @@ class TecnicoServiceTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnAnDataIntegrityViolationException(){
+        when(repository.findByCpf(any())).thenReturn(optionalTecnico);
+
+        try{
+            optionalTecnico.get().setId(2);
+            service.create(tecnicoDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(CPF_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
     }
 
     private void starTecnico(){
