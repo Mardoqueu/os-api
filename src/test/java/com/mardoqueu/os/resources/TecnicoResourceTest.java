@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 @SpringBootTest
@@ -47,7 +49,17 @@ class TecnicoResourceTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnSucess() {
+        when(service.findById(anyInt())).thenReturn(tecnico);
+
+        Tecnico response = service.findById(ID);
+
+        assertNotNull(response);
+        assertEquals(Tecnico.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NOME, response.getNome());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(TELEFONE, response.getTelefone());
     }
 
     @Test
